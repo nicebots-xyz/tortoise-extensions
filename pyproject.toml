@@ -1,0 +1,150 @@
+# SPDX-License-Identifier: ISC
+# Copyright: 2026 NiceBots.xyz
+[build-system]
+requires = ["hatchling~=1.29.0", "hatch-vcs~=0.5.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "tortoise-extensions"
+description = "Extension field types for Tortoise ORM"
+authors = [
+    { name = "Paillat-dev", email = "me@paillat.dev" },
+]
+dependencies = [
+    "tortoise-orm>=0.25.4,<1.0.0",
+]
+requires-python = ">=3.12,<3.15"
+readme = "README.md"
+license = "ISC"
+license-files = ["LICENSE"]
+dynamic = ["version", "urls"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: ISC License (ISCL)",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Typing :: Typed",
+]
+keywords = ["tortoise", "orm", "fields", "pydantic", "uuid6"]
+
+[project.optional-dependencies]
+pydantic = ["pydantic~=2.0"]
+uuid6 = ["uuid6>=2024.0.0"]
+
+[dependency-groups]
+dev = [
+    "basedpyright~=1.39.5",
+    "ruff~=0.15.13",
+]
+test = [
+    "pytest~=9.0.3",
+    "pytest-asyncio~=1.3.0",
+    "pydantic~=2.0",
+    "uuid6>=2024.0.0",
+]
+docs = [
+    "mkdocstrings[python]~=1.0.3",
+    "zensical~=0.0.24",
+    "pydantic~=2.0",
+    "uuid6>=2024.0.0",
+]
+
+[tool.hatch.version]
+source = "vcs"
+fallback-version = "0.0.0"
+
+[tool.hatch.metadata.hooks.vcs.urls]
+Documentation = "https://docs.nicebots.xyz/tortoise-extensions/"
+Repository = "https://github.com/nicebots-xyz/tortoise-extensions"
+Issues = "https://github.com/nicebots-xyz/tortoise-extensions/issues"
+"Source Archive" = "https://github.com/nicebots-xyz/tortoise-extensions/archive/{commit_hash}.zip"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "src/tortoise_extensions/_version.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/tortoise_extensions"]
+
+[tool.pdm]
+distribution = true
+
+[tool.pdm.scripts]
+format = "ruff format ."
+"format:check" = "ruff format --check ."
+lint = "ruff check ."
+typecheck = "basedpyright src"
+tests = "pytest tests"
+"docs:build" = "zensical build --clean"
+"docs:preview" = "python -m http.server 8000 -d site"
+"docs:dev" = "zensical serve"
+quality = { composite = ["format:check", "lint", "typecheck", "tests"] }
+
+[tool.pyright]
+venvPath = "."
+venv = ".venv"
+typeCheckingMode = "strict"
+reportAny = false
+reportUnusedCallResult = false
+reportUnknownMemberType = false
+reportMissingTypeStubs = false
+pythonVersion = "3.12"
+
+[[tool.pyright.executionEnvironments]]
+root = "src/tortoise_extensions/_version.py"
+reportDeprecated = false
+
+[[tool.pyright.executionEnvironments]]
+root = "tests"
+reportIncompatibleVariableOverride = false
+reportReturnType = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 120
+indent-width = 4
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+docstring-code-format = false
+docstring-code-line-length = "dynamic"
+
+[tool.ruff.lint]
+select = ["ALL"]
+extend-ignore = [
+    "ANN401",
+    "COM812",
+    "D100",
+    "D101",
+    "D102",
+    "D103",
+    "D104",
+    "D105",
+    "D106",
+    "D107",
+    "D203",
+    "D211",
+    "D213",
+    "EM101",
+    "EM102",
+    "ISC001",
+    "PLR2004",
+    "TRY003",
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"src/tortoise_extensions/uuid6.py" = ["N801"]
+"tests/*" = ["ARG001", "S101"]

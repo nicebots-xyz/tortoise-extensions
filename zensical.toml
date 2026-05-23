@@ -1,0 +1,61 @@
+# SPDX-License-Identifier: ISC
+# Copyright: 2026 NiceBots.xyz
+[project]
+site_name = "tortoise-extensions"
+site_description = "Extension field types for Tortoise ORM"
+site_url = "https://docs.nicebots.xyz/tortoise-extensions/"
+repo_url = "https://github.com/nicebots-xyz/tortoise-extensions"
+repo_name = "nicebots-xyz/tortoise-extensions"
+copyright = "ISC License"
+
+nav = [
+  { "Home" = "index.md" },
+  { "Usage" = "usage.md" },
+  { "Contributing" = "contributing.md" },
+  { "API Reference" = "api.md" },
+]
+
+[project.theme]
+variant = "modern"
+features = [
+  "navigation.footer",
+]
+
+[project.theme.icon]
+logo = "lucide/database"
+
+[[project.theme.palette]]
+scheme = "slate"
+toggle.icon = "lucide/moon"
+toggle.name = "Switch to light mode"
+primary = "green"
+accent = "lime"
+
+[[project.theme.palette]]
+scheme = "default"
+toggle.icon = "lucide/sun"
+toggle.name = "Switch to dark mode"
+primary = "blue"
+accent = "deep-orange"
+
+[[project.extra.social]]
+icon = "fontawesome/brands/github"
+link = "https://github.com/nicebots-xyz/tortoise-extensions"
+name = "tortoise-extensions on GitHub"
+
+[project.markdown_extensions.admonition]
+[project.markdown_extensions.pymdownx.details]
+[project.markdown_extensions.pymdownx.superfences]
+
+[project.plugins.mkdocstrings.handlers.python]
+paths = ["src"]
+
+[project.plugins.mkdocstrings.handlers.python.options]
+docstring_style = "google"
+show_docstring_examples = true
+show_source = true
+show_signature_annotations = true
+show_root_heading = true
+show_root_full_path = false
+heading_level = 3
+members_order = "source"

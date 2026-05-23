@@ -1,0 +1,102 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*.*.*"]
+
+jobs:
+  quality:
+    uses: ./.github/workflows/quality.yaml
+    permissions:
+      contents: read
+
+  get-version:
+    name: Get Version
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup PDM
+        uses: pdm-project/setup-pdm@94a823180e06fcde4ad29308721954a521c96ed0 # v4
+        with:
+          cache: true
+          python-version-file: "pyproject.toml"
+
+      - name: Install dependencies
+        run: pdm install --frozen-lockfile
+
+      - name: Build package
+        run: pdm build
+
+      - name: Get version
+        id: version
+        run: |
+          VERSION=$(pdm run python -c "from tortoise_extensions._version import __version__; print(__version__)")
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+  publish:
+    name: Publish
+    runs-on: ubuntu-latest
+    needs: [quality, get-version]
+    permissions:
+      id-token: write
+      contents: read
+    environment:
+      name: pypi
+      url: https://pypi.org/project/tortoise-extensions/${{ needs.get-version.outputs.version }}/
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup PDM
+        uses: pdm-project/setup-pdm@94a823180e06fcde4ad29308721954a521c96ed0 # v4
+        with:
+          cache: true
+          python-version-file: "pyproject.toml"
+
+      - name: Install dependencies
+        run: pdm install --frozen-lockfile
+
+      - name: Build and Publish
+        run: pdm publish
+
+  deploy-docs:
+    needs: [quality, publish]
+    name: Deploy docs
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+
+      - name: Setup PDM
+        uses: pdm-project/setup-pdm@94a823180e06fcde4ad29308721954a521c96ed0 # v4
+        with:
+          cache: true
+          python-version-file: "pyproject.toml"
+
+      - name: Install dependencies
+        run: pdm install --frozen-lockfile -G dev -G test -G docs
+
+      - name: Build docs
+        run: pdm run docs:build
+
+      - name: Upload docs
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5
+        with:
+          path: site
+
+      - name: Deploy docs
+        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5
+        id: deployment
