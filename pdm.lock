@@ -5,10 +5,10 @@
 groups = ["default", "dev", "docs", "pydantic", "test", "uuid6"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:a8e34d5fe132550302cd46c135124f5c6da1f07eec46f9f763b6b12fc504b637"
+content_hash = "sha256:c5cb2885dd0425ab1dc95fecae17f8e1ed8be4dc6b51b46442c5bb753ac29549"
 
 [[metadata.targets]]
-requires_python = ">=3.12"
+requires_python = ">=3.12,<3.15"
 
 [[package]]
 name = "aiosqlite"
@@ -619,16 +619,6 @@ files = [
 ]
 
 [[package]]
-name = "pytz"
-version = "2026.2"
-summary = "World timezone definitions, modern and historical"
-groups = ["default"]
-files = [
-    {file = "pytz-2026.2-py2.py3-none-any.whl", hash = "sha256:04156e608bee23d3792fd45c94ae47fae1036688e75032eea2e3bf0323d1f126"},
-    {file = "pytz-2026.2.tar.gz", hash = "sha256:0e60b47b29f21574376f218fe21abc009894a2321ea16c6754f3cad6eb7cdd6a"},
-]
-
-[[package]]
 name = "pyyaml"
 version = "6.0.3"
 requires_python = ">=3.8"
@@ -777,21 +767,21 @@ files = [
 
 [[package]]
 name = "tortoise-orm"
-version = "0.25.4"
-requires_python = ">=3.9"
+version = "1.1.7"
+requires_python = ">=3.10"
 summary = "Easy async ORM for python, built with relations in mind"
 groups = ["default"]
 dependencies = [
     "aiosqlite<1.0.0,>=0.16.0",
     "anyio",
     "iso8601<3.0.0,>=2.1.0; python_version < \"4.0\"",
-    "pypika-tortoise<1.0.0,>=0.6.3",
-    "pytz",
+    "pypika-tortoise<1.0.0,>=0.6.5",
+    "tomlkit<1.0.0,>=0.11.4; python_version < \"3.11\"",
     "typing-extensions>=4.1.0; python_version < \"3.11\"",
 ]
 files = [
-    {file = "tortoise_orm-0.25.4-py3-none-any.whl", hash = "sha256:a699e629632abf760d14794e8afd3579a9c844623d50a58a6fbdcd6f52b5a37d"},
-    {file = "tortoise_orm-0.25.4.tar.gz", hash = "sha256:88c231ebe158f1287fc9c9497313f9a46cfb70b66c458ba39900921a4e52d01b"},
+    {file = "tortoise_orm-1.1.7-py3-none-any.whl", hash = "sha256:b640b786905891cc120aa16d1a7af18cd54b111a812f9b1c1d1c7b294d62949d"},
+    {file = "tortoise_orm-1.1.7.tar.gz", hash = "sha256:a0f0f27f9c92547739f0a3f0862c257ab64d8baadbc0e548cbcfa2d70bcbe275"},
 ]
 
 [[package]]
