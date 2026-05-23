@@ -64,9 +64,11 @@ class FutureUUIDField(fields.Field[UUID], UUID):  # pyright: ignore[reportUnsafe
         Returns:
             Parsed UUID, or ``None`` when the value is null.
         """
-        if value is None or isinstance(value, UUID):
+        if value is None:
+            return None
+        if isinstance(value, UUID):
             return value
-        return UUID(value)
+        return UUID(str(value))
 
 
 __all__ = ["FutureUUIDField"]

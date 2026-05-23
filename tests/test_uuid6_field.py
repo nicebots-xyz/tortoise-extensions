@@ -34,6 +34,30 @@ def test_to_python_value_uuid(field: FutureUUIDField) -> None:
     assert field.to_python_value(value) is value
 
 
+def test_to_python_value_stdlib_uuid(field: FutureUUIDField) -> None:
+    import uuid as stdlib_uuid
+
+    value = stdlib_uuid.uuid4()
+    result = field.to_python_value(value)
+    assert isinstance(result, UUID)
+    assert result == UUID(str(value))
+
+
+def test_to_python_value_driver_uuid_object(field: FutureUUIDField) -> None:
+    """PostgreSQL asyncpg returns pgproto.UUID — not uuid6.UUID."""
+
+    class _PgProtoLike:
+        def __init__(self, text: str) -> None:
+            self._text = text
+
+        def __str__(self) -> str:
+            return self._text
+
+    expected = uuid7()
+    driver_value = _PgProtoLike(str(expected))
+    assert field.to_python_value(driver_value) == expected
+
+
 async def test_uuid_record_create_and_load(db: None) -> None:
     record = await UuidRecord.create()
     loaded = await UuidRecord.get(id=record.id)
