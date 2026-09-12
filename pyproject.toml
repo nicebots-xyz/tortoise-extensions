@@ -37,7 +37,7 @@ uuid6 = ["uuid6>=2024.0.0"]
 [dependency-groups]
 dev = [
     "basedpyright~=1.39.5",
-    "ruff~=0.15.13",
+    "ruff~=0.16.7",
 ]
 test = [
     "pytest~=9.0.3",
