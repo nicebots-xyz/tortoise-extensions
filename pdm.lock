@@ -5,7 +5,7 @@
 groups = ["default", "dev", "docs", "pydantic", "test", "uuid6"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.1"
-content_hash = "sha256:b1f216d45e3ccc49f6be45e80aa814f9380965160a78f5df946e53924044582a"
+content_hash = "sha256:1ca71391dd6fdac3bc1267037227d80ac4b14062494a95a5c0710eb76b761687"
 
 [[metadata.targets]]
 requires_python = ">=3.12,<3.15"
@@ -50,16 +50,16 @@ files = [
 
 [[package]]
 name = "basedpyright"
-version = "1.39.10"
-requires_python = ">=3.8"
+version = "1.40.2"
+requires_python = ">=3.10"
 summary = "static type checking for Python (but based)"
 groups = ["dev"]
 dependencies = [
     "nodejs-wheel-binaries>=20.13.1",
 ]
 files = [
-    {file = "basedpyright-1.39.10-py3-none-any.whl", hash = "sha256:cbd75d83c0be841329bcfef2d2f1182f152a6d975b8eb199e75cf5b8e9a3de78"},
-    {file = "basedpyright-1.39.10.tar.gz", hash = "sha256:c8eaf5302f3265e275c7df4fba194d7afa7c1cb53fbfd448e90098360aca2c2e"},
+    {file = "basedpyright-1.40.2-py3-none-any.whl", hash = "sha256:3a53aeb93a86675ded0e12bc27bd8476c1742356de07ad8cab67bff18110c690"},
+    {file = "basedpyright-1.40.2.tar.gz", hash = "sha256:d4db36d095230379acc66c7e5fba7e4b50ca902f6e803d696782dd031cb8d7d7"},
 ]
 
 [[package]]
