@@ -8,6 +8,7 @@ from tortoise.models import Model
 from uuid6 import UUID
 
 from tortoise_extensions.pydantic import PydanticJSONField
+from tortoise_extensions.s3 import S3Field
 from tortoise_extensions.uuid6 import FutureUUIDField
 
 
@@ -31,4 +32,13 @@ class UuidRecord(Model):
         table = "uuid_records"
 
 
-__all__ = ["UUID", "PydanticRecord", "SamplePayload", "UuidRecord"]
+class S3Record(Model):
+    id = fields.IntField(primary_key=True)
+    file = S3Field(null=True)
+    other = S3Field(storage="other", null=True)
+
+    class Meta:
+        table = "s3_records"
+
+
+__all__ = ["UUID", "PydanticRecord", "S3Record", "SamplePayload", "UuidRecord"]
