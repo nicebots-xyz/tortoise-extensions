@@ -1,15 +1,24 @@
 # SPDX-License-Identifier: ISC
 # Copyright: 2026 NiceBots.xyz
 
+from pathlib import Path
 from uuid import UUID
 
 import pytest
-from obstore.store import MemoryStore, S3Store
+from obstore.store import LocalStore, MemoryStore, S3Store
 from tortoise.exceptions import ConfigurationError
 from tortoise.models import Model
 
 from tests.models import S3Record
-from tortoise_extensions.s3 import S3Field, S3Object, S3Storage, get_store, init_storages
+from tortoise_extensions.s3 import (
+    LocalStorage,
+    MemoryStorage,
+    S3Field,
+    S3Object,
+    S3Storage,
+    get_store,
+    init_storages,
+)
 
 
 def _storage(*, ssl: bool = True, region: str | None = None) -> S3Storage:
@@ -31,6 +40,24 @@ def test_storage_region_optional() -> None:
     init_storages({"default": _storage(), "eu": _storage(region="eu-west-1")})
     assert "region" not in get_store("default").config
     assert get_store("eu").config.get("region") == "eu-west-1"
+
+
+async def test_memory_storage() -> None:
+    init_storages({"models": MemoryStorage()})
+    assert isinstance(get_store("models"), MemoryStore)
+    handle = S3Object("models")
+    await handle.write(b"memory")
+    assert await handle.read() == b"memory"
+
+
+async def test_local_storage(tmp_path: Path) -> None:
+    root = tmp_path / "objects"
+    init_storages({"models": LocalStorage(path=root)})
+    assert isinstance(get_store("models"), LocalStore)
+    handle = S3Object("models")
+    key = await handle.write(b"local", key="avatars/1.png")
+    assert (root / key).read_bytes() == b"local"
+    assert await handle.read() == b"local"
 
 
 def test_storage_rejects_scheme() -> None:
