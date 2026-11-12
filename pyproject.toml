@@ -143,6 +143,7 @@ extend-ignore = [
     "ISC001",
     "PLR2004",
     "TRY003",
+    "CPY001" # Managed by licensor
 ]
 
 [tool.ruff.lint.pydocstyle]
