@@ -86,12 +86,3 @@ await record.save()
 ```
 
 The column stores the object key (`VARCHAR(1024)`) and loads as an `S3Object` handle backed by [`obstore`](https://pypi.org/project/obstore/).
-
-| Setting | Effect |
-|---------|--------|
-| `S3Storage.endpoint` | Host and optional port, without scheme |
-| `S3Storage.bucket` | Bucket holding the objects |
-| `S3Storage.access_key` / `secret_key` | Credentials |
-| `S3Storage.region` | Signing region, resolved by `obstore` when omitted |
-| `S3Storage.ssl` | `https` when `True` (default), plain `http` when `False` |
-| `S3Field(storage=...)` | Storage name, defaults to the model's Tortoise app |
