@@ -71,10 +71,12 @@ class Attachment(Model):
     thumb = S3Field(storage="cdn", null=True)
 
 
-init_storages({
-    "models": S3Storage(endpoint="s3.example.com", bucket="main", access_key="...", secret_key="..."),
-    "cdn": S3Storage(endpoint="minio:9000", bucket="cdn", access_key="...", secret_key="...", ssl=False),
-})
+init_storages(
+    {
+        "models": S3Storage(endpoint="s3.example.com", bucket="main", access_key="...", secret_key="..."),
+        "cdn": S3Storage(endpoint="minio:9000", bucket="cdn", access_key="...", secret_key="...", ssl=False),
+    }
+)
 
 record = await Attachment.create()
 await record.file.write(b"hello")
