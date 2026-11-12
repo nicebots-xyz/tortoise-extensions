@@ -19,7 +19,8 @@ Optional extras:
 ```bash
 pip install tortoise-extensions[pydantic]
 pip install tortoise-extensions[uuid6]
-pip install tortoise-extensions[pydantic,uuid6]
+pip install tortoise-extensions[s3]
+pip install tortoise-extensions[pydantic,uuid6,s3]
 ```
 
 ## Usage
@@ -64,6 +65,23 @@ class Item(Model):
 ```
 
 Primary keys without an explicit `default` receive a UUID7 from the [`uuid6`](https://pypi.org/project/uuid6/) package. PostgreSQL uses the native `UUID` column type; other backends store `CHAR(36)`.
+
+### S3 objects (`s3` extra)
+
+```python
+from tortoise.models import Model
+
+from tortoise_extensions.s3 import S3Field
+
+
+class Attachment(Model):
+    file = S3Field(null=True)
+
+    class Meta:
+        table = "attachments"
+```
+
+The column stores an object key and loads as an `S3Object` handle (`read`, `write`, `delete`, `get_or_write`, ...) backed by [`obstore`](https://pypi.org/project/obstore/). Storages are registered per Tortoise app with `init_storages`, each with its own `ssl` setting. See the [usage docs](https://docs.nicebots.xyz/tortoise-extensions/usage/) for details.
 
 ## Contributing a new extension
 

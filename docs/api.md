@@ -19,3 +19,15 @@ Copyright: 2026 NiceBots.xyz
       members:
         - FutureUUIDField
       show_submodules: false
+
+## S3
+
+::: tortoise_extensions.s3
+    options:
+      members:
+        - S3Field
+        - S3Object
+        - S3Storage
+        - init_storages
+        - get_store
+      show_submodules: false
