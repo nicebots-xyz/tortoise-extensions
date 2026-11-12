@@ -39,9 +39,7 @@ class Settings(BaseModel):
 
 
 class AppConfig(Model):
-    settings: PydanticJSONField[Settings] = PydanticJSONField(
-        Settings, default=Settings
-    )
+    settings: PydanticJSONField[Settings] = PydanticJSONField(Settings, default=Settings)
 
     class Meta:
         table = "app_configs"
