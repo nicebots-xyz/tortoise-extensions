@@ -5,7 +5,7 @@
 groups = ["default", "dev", "docs", "pydantic", "s3", "test", "uuid6"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.1"
-content_hash = "sha256:65acba40e4fec1db8179e20c896f14108f6cb284d8673739843b1110b24543d4"
+content_hash = "sha256:04c969beb71bcc079bd8709ed72265e555259513495f7d8ce373183336e671f3"
 
 [[metadata.targets]]
 requires_python = ">=3.12,<3.15"
@@ -857,7 +857,7 @@ name = "uuid6"
 version = "2025.0.1"
 requires_python = ">=3.9"
 summary = "New time-based UUID formats which are suited for use as a database key"
-groups = ["docs", "test", "uuid6"]
+groups = ["docs", "s3", "test", "uuid6"]
 files = [
     {file = "uuid6-2025.0.1-py3-none-any.whl", hash = "sha256:80530ce4d02a93cdf82e7122ca0da3ebbbc269790ec1cb902481fa3e9cc9ff99"},
     {file = "uuid6-2025.0.1.tar.gz", hash = "sha256:cd0af94fa428675a44e32c5319ec5a3485225ba2179eefcf4c3f205ae30a81bd"},

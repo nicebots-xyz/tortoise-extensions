@@ -1,6 +1,8 @@
 # SPDX-License-Identifier: ISC
 # Copyright: 2026 NiceBots.xyz
 
+from uuid import UUID
+
 import pytest
 from obstore.store import MemoryStore, S3Store
 from tortoise.exceptions import ConfigurationError
@@ -10,8 +12,10 @@ from tests.models import S3Record
 from tortoise_extensions.s3 import S3Field, S3Object, S3Storage, get_store, init_storages
 
 
-def _storage(*, ssl: bool) -> S3Storage:
-    return S3Storage(endpoint="localhost:9000", bucket="bucket", access_key="key", secret_key="secret", ssl=ssl)
+def _storage(*, ssl: bool = True, region: str | None = None) -> S3Storage:
+    return S3Storage(
+        endpoint="localhost:9000", bucket="bucket", access_key="key", secret_key="secret", region=region, ssl=ssl
+    )
 
 
 @pytest.mark.parametrize(("ssl", "scheme"), [(True, "https"), (False, "http")])
@@ -21,6 +25,12 @@ def test_storage_ssl_toggle(ssl: bool, scheme: str) -> None:
     assert isinstance(store, S3Store)
     assert store.config.get("endpoint") == f"{scheme}://localhost:9000"
     assert str((store.client_options or {}).get("allow_http")).lower() == str(not ssl).lower()
+
+
+def test_storage_region_optional() -> None:
+    init_storages({"default": _storage(), "eu": _storage(region="eu-west-1")})
+    assert "region" not in get_store("default").config
+    assert get_store("eu").config.get("region") == "eu-west-1"
 
 
 def test_storage_rejects_scheme() -> None:
@@ -80,6 +90,11 @@ async def test_round_trip_nullable(db: None, stores: dict[str, MemoryStore]) -> 
     reloaded = await S3Record.get(id=record.id)
     assert reloaded.file == S3Object("models")
     await reloaded.file.delete()
+
+
+async def test_generated_key_is_uuid7(stores: dict[str, MemoryStore]) -> None:
+    key = await S3Object("models").write(b"x")
+    assert UUID(hex=key).version == 7
 
 
 async def test_write_explicit_key(db: None, stores: dict[str, MemoryStore]) -> None:

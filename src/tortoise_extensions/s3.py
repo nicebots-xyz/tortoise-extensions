@@ -2,15 +2,23 @@
 # Copyright: 2026 NiceBots.xyz
 """S3-backed field for Tortoise ORM (via the ``obstore`` package)."""
 
+import sys
 from collections.abc import Awaitable, Callable, Mapping
 from dataclasses import dataclass
-from typing import Any, override
-from uuid import uuid4
+from typing import TYPE_CHECKING, Any, override
 
 from obstore.store import ObjectStore, S3Store
 from tortoise import fields
 from tortoise.exceptions import ConfigurationError
 from tortoise.models import Model
+
+if sys.version_info >= (3, 14):
+    from uuid import uuid7
+else:
+    from uuid6 import uuid7
+
+if TYPE_CHECKING:
+    from obstore.store import S3Config
 
 _stores: dict[str, ObjectStore] = {}
 
@@ -24,7 +32,7 @@ class S3Storage:
         bucket: Bucket holding the objects.
         access_key: Access key ID.
         secret_key: Secret access key.
-        region: Signing region.
+        region: Signing region, or ``None`` to let ``obstore`` resolve it (``AWS_REGION``, else ``us-east-1``).
         ssl: Use ``https`` when ``True``, plain ``http`` when ``False``.
     """
 
@@ -32,7 +40,7 @@ class S3Storage:
     bucket: str
     access_key: str
     secret_key: str
-    region: str = "us-east-1"
+    region: str | None = None
     ssl: bool = True
 
     def __post_init__(self) -> None:
@@ -50,15 +58,14 @@ class S3Storage:
         Returns:
             A configured ``S3Store``.
         """
-        scheme = "https" if self.ssl else "http"
-        return S3Store(
-            self.bucket,
-            endpoint=f"{scheme}://{self.endpoint}",
-            region=self.region,
-            access_key_id=self.access_key,
-            secret_access_key=self.secret_key,
-            client_options={"allow_http": not self.ssl},
-        )
+        config: S3Config = {
+            "endpoint": f"{'https' if self.ssl else 'http'}://{self.endpoint}",
+            "access_key_id": self.access_key,
+            "secret_access_key": self.secret_key,
+        }
+        if self.region is not None:
+            config["region"] = self.region
+        return S3Store(self.bucket, config=config, client_options={"allow_http": not self.ssl})
 
 
 def init_storages(storages: Mapping[str, S3Storage | ObjectStore]) -> None:
@@ -126,7 +133,7 @@ class S3Object:
         return bytes(await result.bytes_async())
 
     async def write(self, data: bytes, *, key: str | None = None) -> str:
-        """Upload ``data``, generating a key when the handle has none.
+        """Upload ``data``, generating a UUID7 key when the handle has none.
 
         Args:
             data: Content to store.
@@ -135,7 +142,7 @@ class S3Object:
         Returns:
             The key written to.
         """
-        target = key or self.key or uuid4().hex
+        target = key or self.key or uuid7().hex
         await get_store(self.storage).put_async(target, data)
         self.key = target
         return target
