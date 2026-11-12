@@ -5,7 +5,7 @@
 groups = ["default", "dev", "docs", "pydantic", "s3", "test", "uuid6"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.1"
-content_hash = "sha256:de221103f8b177874c2f765d42602afe38e58a634d789197e8abdf268bddc193"
+content_hash = "sha256:d7473750ef09e354f29d683cc346db7601b7ca44ec7f96fd8e7a0d59caa9aef0"
 
 [[metadata.targets]]
 requires_python = ">=3.12,<3.15"
@@ -652,16 +652,6 @@ files = [
 ]
 
 [[package]]
-name = "pytz"
-version = "2026.6"
-summary = "World timezone definitions, modern and historical"
-groups = ["default"]
-files = [
-    {file = "pytz-2026.6-py2.py3-none-any.whl", hash = "sha256:7fed3fee8fd6bd4a2b7b75a8d56021d0624127bf69bd5691f115db929ac570b3"},
-    {file = "pytz-2026.6.tar.gz", hash = "sha256:3b0fc2727707663d6e517936f444fd8a8b240f1fc32f4bf7ee03274245945284"},
-]
-
-[[package]]
 name = "pyyaml"
 version = "6.0.3"
 requires_python = ">=3.8"
@@ -799,21 +789,21 @@ files = [
 
 [[package]]
 name = "tortoise-orm"
-version = "0.25.4"
-requires_python = ">=3.9"
+version = "1.1.9"
+requires_python = ">=3.10"
 summary = "Easy async ORM for python, built with relations in mind"
 groups = ["default"]
 dependencies = [
     "aiosqlite<1.0.0,>=0.16.0",
     "anyio",
     "iso8601<3.0.0,>=2.1.0; python_version < \"4.0\"",
-    "pypika-tortoise<1.0.0,>=0.6.3",
-    "pytz",
+    "pypika-tortoise<1.0.0,>=0.6.5",
+    "tomlkit<1.0.0,>=0.11.4; python_version < \"3.11\"",
     "typing-extensions>=4.1.0; python_version < \"3.11\"",
 ]
 files = [
-    {file = "tortoise_orm-0.25.4-py3-none-any.whl", hash = "sha256:a699e629632abf760d14794e8afd3579a9c844623d50a58a6fbdcd6f52b5a37d"},
-    {file = "tortoise_orm-0.25.4.tar.gz", hash = "sha256:88c231ebe158f1287fc9c9497313f9a46cfb70b66c458ba39900921a4e52d01b"},
+    {file = "tortoise_orm-1.1.9-py3-none-any.whl", hash = "sha256:9304796aef7406cfd2b9d8e2c42598e56df015fb61a2718bb0df08901d2253ce"},
+    {file = "tortoise_orm-1.1.9.tar.gz", hash = "sha256:0399e1aa9518620f8b9c455598ac06ab890332c03e335cfca4b73b48d4e6abaa"},
 ]
 
 [[package]]
