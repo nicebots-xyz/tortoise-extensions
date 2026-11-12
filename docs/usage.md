@@ -96,4 +96,4 @@ The column stores the object key (`VARCHAR(1024)`) and loads as an `S3Object` ha
 | `S3Storage.ssl` | `https` when `True` (default), plain `http` when `False` |
 | `S3Field(storage=...)` | Storage name, defaults to the model's Tortoise app |
 
-`NULL` columns and new records load as empty handles that can still be written to. Writing to an empty handle generates a key, so save the model afterwards. Handle methods are listed in the [API reference](api.md#s3).
+Handle behavior is documented on each method in the [API reference](api.md#s3).
