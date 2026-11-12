@@ -32,7 +32,7 @@ class S3Storage:
         bucket: Bucket holding the objects.
         access_key: Access key ID.
         secret_key: Secret access key.
-        region: Signing region, or ``None`` to let ``obstore`` resolve it (``AWS_REGION``, else ``us-east-1``).
+        region: Signing region, or ``None`` to let ``obstore`` resolve it.
         ssl: Use ``https`` when ``True``, plain ``http`` when ``False``.
     """
 
