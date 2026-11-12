@@ -28,6 +28,9 @@ Copyright: 2026 NiceBots.xyz
         - S3Field
         - S3Object
         - S3Storage
+        - MemoryStorage
+        - LocalStorage
+        - Storage
         - init_storages
         - get_store
       show_submodules: false

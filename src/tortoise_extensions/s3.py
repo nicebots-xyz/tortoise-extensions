@@ -5,9 +5,10 @@
 import sys
 from collections.abc import Awaitable, Callable, Mapping
 from dataclasses import dataclass
+from pathlib import Path
 from typing import TYPE_CHECKING, Any, override
 
-from obstore.store import ObjectStore, S3Store
+from obstore.store import LocalStore, MemoryStore, ObjectStore, S3Store
 from tortoise import fields
 from tortoise.exceptions import ConfigurationError
 from tortoise.models import Model
@@ -68,7 +69,43 @@ class S3Storage:
         return S3Store(self.bucket, config=config, client_options={"allow_http": not self.ssl})
 
 
-def init_storages(storages: Mapping[str, S3Storage | ObjectStore]) -> None:
+@dataclass(frozen=True, slots=True)
+class MemoryStorage:
+    """In-process storage, lost when the process exits. Meant for tests."""
+
+    def to_store(self) -> MemoryStore:
+        """Build a fresh ``obstore`` in-memory store.
+
+        Returns:
+            An empty ``MemoryStore``.
+        """
+        return MemoryStore()
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class LocalStorage:
+    """Storage in a local directory, created when missing. Meant for local development.
+
+    Attributes:
+        path: Directory holding the objects.
+    """
+
+    path: str | Path
+
+    def to_store(self) -> LocalStore:
+        """Build the ``obstore`` filesystem store for this directory.
+
+        Returns:
+            A ``LocalStore`` rooted at ``path``.
+        """
+        return LocalStore(self.path, mkdir=True)
+
+
+type Storage = S3Storage | MemoryStorage | LocalStorage
+"""Storage settings accepted by ``init_storages``."""
+
+
+def init_storages(storages: Mapping[str, Storage | ObjectStore]) -> None:
     """Register the named storages used by ``S3Field``, replacing any previous ones.
 
     Names are Tortoise app labels (the default storage of every model in that app)
@@ -79,7 +116,10 @@ def init_storages(storages: Mapping[str, S3Storage | ObjectStore]) -> None:
     """
     _stores.clear()
     _stores.update(
-        {name: value.to_store() if isinstance(value, S3Storage) else value for name, value in storages.items()}
+        {
+            name: value.to_store() if isinstance(value, S3Storage | MemoryStorage | LocalStorage) else value
+            for name, value in storages.items()
+        }
     )
 
 
@@ -276,4 +316,13 @@ class S3Field(fields.Field[S3Object]):
         return None if value is None else str(value)
 
 
-__all__ = ["S3Field", "S3Object", "S3Storage", "get_store", "init_storages"]
+__all__ = [
+    "LocalStorage",
+    "MemoryStorage",
+    "S3Field",
+    "S3Object",
+    "S3Storage",
+    "Storage",
+    "get_store",
+    "init_storages",
+]
