@@ -1,12 +1,18 @@
 # SPDX-License-Identifier: ISC
 # Copyright: 2026 NiceBots.xyz
 
+import sys
+
 import pytest
 from tortoise.models import Model
-from uuid6 import UUID, uuid7
 
 from tests.models import UuidRecord
 from tortoise_extensions.uuid6 import FutureUUIDField
+
+if sys.version_info >= (3, 14):
+    from uuid import UUID, uuid7
+else:
+    from uuid6 import UUID, uuid7
 
 
 @pytest.fixture

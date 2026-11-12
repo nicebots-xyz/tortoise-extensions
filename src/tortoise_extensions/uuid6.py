@@ -1,12 +1,17 @@
 # SPDX-License-Identifier: ISC
 # Copyright: 2026 NiceBots.xyz
-"""UUID v6+ field for Tortoise ORM (via the ``uuid6`` package)."""
+"""UUID v6+ field for Tortoise ORM (stdlib on Python 3.14+, ``uuid6`` package below)."""
 
+import sys
 from typing import Any, override
 
 from tortoise import fields
 from tortoise.models import Model
-from uuid6 import UUID, uuid7
+
+if sys.version_info >= (3, 14):
+    from uuid import UUID, uuid7
+else:
+    from uuid6 import UUID, uuid7
 
 
 class FutureUUIDField(fields.Field[UUID], UUID):  # pyright: ignore[reportUnsafeMultipleInheritance]
@@ -14,7 +19,7 @@ class FutureUUIDField(fields.Field[UUID], UUID):  # pyright: ignore[reportUnsafe
 
     Stores UUIDs as ``CHAR(36)`` on most backends and as native ``UUID`` on
     PostgreSQL. When used as a primary key without an explicit ``default``,
-    assigns UUID7 via ``uuid6.uuid7``.
+    assigns UUID7 via ``uuid7``.
 
     Examples:
         >>> class Item(Model):

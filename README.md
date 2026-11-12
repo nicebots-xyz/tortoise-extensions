@@ -62,7 +62,7 @@ class Item(Model):
         table = "items"
 ```
 
-Primary keys without an explicit `default` receive a UUID7 from the [`uuid6`](https://pypi.org/project/uuid6/) package. PostgreSQL uses the native `UUID` column type; other backends store `CHAR(36)`.
+Primary keys without an explicit `default` receive a UUID7, from the standard library on Python 3.14+ and the [`uuid6`](https://pypi.org/project/uuid6/) package below. PostgreSQL uses the native `UUID` column type; other backends store `CHAR(36)`.
 
 ### S3 objects (`s3` extra)
 
