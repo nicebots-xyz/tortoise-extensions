@@ -2,14 +2,20 @@
 # Copyright: 2026 NiceBots.xyz
 """Minimal Tortoise models for integration tests."""
 
+import sys
+
 from pydantic import BaseModel
 from tortoise import fields
 from tortoise.models import Model
-from uuid6 import UUID
 
 from tortoise_extensions.pydantic import PydanticJSONField
 from tortoise_extensions.s3 import S3Field
 from tortoise_extensions.uuid6 import FutureUUIDField
+
+if sys.version_info >= (3, 14):
+    from uuid import UUID
+else:
+    from uuid6 import UUID
 
 
 class SamplePayload(BaseModel):
