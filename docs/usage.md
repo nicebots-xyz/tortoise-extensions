@@ -95,5 +95,3 @@ The column stores the object key (`VARCHAR(1024)`) and loads as an `S3Object` ha
 | `S3Storage.region` | Signing region, resolved by `obstore` when omitted |
 | `S3Storage.ssl` | `https` when `True` (default), plain `http` when `False` |
 | `S3Field(storage=...)` | Storage name, defaults to the model's Tortoise app |
-
-Handle behavior is documented on each method in the [API reference](api.md#s3).
