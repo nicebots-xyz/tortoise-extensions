@@ -85,16 +85,15 @@ thumb = await record.thumb.get_or_write(render_thumbnail)
 await record.save()
 ```
 
-The column stores the object key (`VARCHAR(1024)`); values load as `S3Object` handles backed by [`obstore`](https://pypi.org/project/obstore/). A field uses its `storage` override, otherwise the storage named after the model's Tortoise app. `ssl` picks `https` or plain `http` per storage.
+The column stores the object key (`VARCHAR(1024)`) and loads as an `S3Object` handle backed by [`obstore`](https://pypi.org/project/obstore/).
 
-`NULL` columns and new records load as empty handles that can still be written to. Writing to an empty handle generates a key, so save the model afterwards.
+| Setting | Effect |
+|---------|--------|
+| `S3Storage.endpoint` | Host and optional port, without scheme |
+| `S3Storage.bucket` | Bucket holding the objects |
+| `S3Storage.access_key` / `secret_key` | Credentials |
+| `S3Storage.region` | Signing region, resolved by `obstore` when omitted |
+| `S3Storage.ssl` | `https` when `True` (default), plain `http` when `False` |
+| `S3Field(storage=...)` | Storage name, defaults to the model's Tortoise app |
 
-| Member | Behavior |
-|--------|----------|
-| `is_empty` | No key stored |
-| `read()` | Content, or `None` when empty |
-| `write(data, key=None)` | Uploads, returns the key |
-| `delete()` | Removes the object and empties the handle |
-| `exists()` | Whether the object is present in the storage |
-| `read_or(default)` | Content, or `default` without writing |
-| `get_or_write(value)` | Content, writing `value` (bytes or async factory) when empty or missing |
+`NULL` columns and new records load as empty handles that can still be written to. Writing to an empty handle generates a key, so save the model afterwards. Handle methods are listed in the [API reference](api.md#s3).
