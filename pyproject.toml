@@ -42,7 +42,7 @@ dev = [
 ]
 test = [
     "pytest~=9.2.0",
-    "pytest-asyncio~=1.4.1.post1",
+    "pytest-asyncio~=1.5.0",
     "pydantic~=2.0",
     "uuid6>=2024.0.0",
     "obstore~=0.12.1",
